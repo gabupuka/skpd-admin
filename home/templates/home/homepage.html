@@ -1,0 +1,13 @@
+{% if homepage_list %}
+    <ul>
+    {% for skpd, ukuran in homepage_list %}
+        <li><a href="">{{ forloop.counter }}. ATM ID: {{ skpd.atm.atm_id }},
+                                              NO SKPD: {{ skpd.no_skpd }},
+                                              Jatuh Tempo: {{ skpd.masa_berlaku_akhir }},
+                                              Ukuran: {{ ukuran.total }} m
+            </a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No atms are available.</p>
+{% endif %}

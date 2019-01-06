@@ -1,13 +1,15 @@
 from django.db import models
 
 class ATM(models.Model):
-    id = models.CharField(max_length=7, primary_key=True)
+    atm_id = models.CharField(max_length=7, unique=True)
 
     def __str__(self):
-        return self.id
+        if self.id == None:
+            return "ATM None"
+        return self.atm_id
 
 class SKPD(models.Model):
-    atm                         = models.ForeignKey(ATM, on_delete=models.CASCADE)
+    atm                         = models.ForeignKey(ATM, to_field='atm_id', on_delete=models.CASCADE)
     no_skpd                     = models.CharField(max_length=17, primary_key=True)
     nama_pemilik                = models.CharField(max_length=255)
     alamat_pemilik              = models.CharField(max_length=255)
@@ -21,9 +23,11 @@ class SKPD(models.Model):
     masa_berlaku_awal           = models.DateField()
     masa_berlaku_akhir          = models.DateField()
     nilai_sewa                  = models.IntegerField()
-    comment                     = models.TextField()
+    comment                     = models.TextField(default=None, blank=True, null=True)
 
     def __str__(self):
+        if self.no_skpd == None:
+            return "SKPD None"
         return self.no_skpd
 
 class Ukuran(models.Model):
