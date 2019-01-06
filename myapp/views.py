@@ -6,7 +6,7 @@ from django.views import generic
 from .models import ATM, SKPD, Ukuran
 
 class HomepageView(generic.ListView):
-    template_name = 'home/homepage.html'
+    template_name = 'myapp/homepage.html'
     context_object_name = 'homepage_list'
 
     def get_queryset(self):
