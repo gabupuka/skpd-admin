@@ -1,7 +1,9 @@
+<h1><a href="{% url 'myapp.home_urls:homepage' %}">Home</a></h1>
+
 {% if atm_detail %}
-    <h1>{{ atm_detail|get_dict_item:'tempat_pemasangan' }}</h1>
-    <h1>{{ atm_detail|get_dict_item:'lokasi_pemasangan' }}</h1>
-    <h1>{{ atm_detail|get_dict_item:'atm_id' }}</h1>
+    <h2>{{ atm_detail|get_dict_item:'tempat_pemasangan' }}</h1>
+    <h2>{{ atm_detail|get_dict_item:'lokasi_pemasangan' }}</h1>
+    <h2>{{ atm_detail|get_dict_item:'atm_id' }}</h1>
 
     {% with skpd_list=atm_detail|get_dict_item:'skpd_list' %}
         {% if skpd_list %}
@@ -18,6 +20,7 @@
         {% else %}
             <p>No SKPDs are available.</p>
         {% endif %}
+        <a href="{% url 'myapp.detail_urls:create_new_skpd' atm_detail|get_dict_item:'atm_pk' %}"><button>New</button></a>
     {% endwith %}
 {% else %}
     <p>No atm data.</p>

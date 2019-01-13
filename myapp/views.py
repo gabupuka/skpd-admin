@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse_lazy
 from django.views import generic
-from myapp.forms import ATMCreateNewForm
+from myapp.forms import ATMCreateNewForm, SKPDCreateNewForm
 
 from .models import ATM, SKPD, Ukuran
 
@@ -34,6 +34,7 @@ class ATMDetailView(generic.DetailView):
             'tempat_pemasangan': skpd_list[0].tempat_pemasangan,
             'lokasi_pemasangan': skpd_list[0].lokasi_pemasangan,
             'atm_id': atm.atm_id,
+            'atm_pk': atm.id,
             'skpd_list': skpd_list
         }
 
@@ -78,3 +79,60 @@ class ATMCreateNewView(generic.FormView):
         data = form.cleaned_data
         self.create_new_ATM(data)
         return super().form_valid(form)
+
+class SKPDCreateNewView(generic.FormView):
+    form_class = SKPDCreateNewForm
+    template_name = 'myapp/skpd_create_new.html'
+
+    def get_atm_detail_context(self):
+        atm = ATM.objects.get(pk=self.kwargs['pk'])
+        skpd = SKPD.objects.filter(atm=atm)[0]
+        context = {
+            'tempat_pemasangan': skpd.tempat_pemasangan,
+            'lokasi_pemasangan': skpd.lokasi_pemasangan,
+            'atm_id': atm.atm_id
+        }
+
+        return context
+
+    def get_context_data(self, **kwargs):
+        kwargs['atm_detail'] = self.get_atm_detail_context()
+        return super().get_context_data(**kwargs)
+
+    def create_new_SKPD(self, data):
+        atm = ATM.objects.get(pk=self.kwargs['pk'])
+
+        skpd = SKPD(atm=atm, no_skpd=data.get('no_skpd'))
+        skpd.nama_pemilik = data.get('nama_pemilik')
+        skpd.alamat_pemilik = data.get('alamat_pemilik')
+        skpd.area_koordinasi_pemilik = data.get('area_koordinasi_pemilik')
+        skpd.isi_teks = data.get('isi_teks')
+        skpd.tempat_pemasangan = data.get('tempat_pemasangan')
+        skpd.lokasi_pemasangan = data.get('lokasi_pemasangan')
+        skpd.kota_lokasi_pemasangan = data.get('kota_lokasi_pemasangan')
+        skpd.kecamatan_lokasi_pemasangan = data.get('kecamatan_lokasi_pemasangan')
+        skpd.kelurahan_lokasi_pemasangan = data.get('kelurahan_lokasi_pemasangan')
+        skpd.masa_berlaku_awal = data.get('masa_berlaku_awal')
+        skpd.masa_berlaku_akhir = data.get('masa_berlaku_akhir')
+        skpd.nilai_sewa = data.get('nilai_sewa')
+        skpd.comment = data.get('comment')
+        skpd.save()
+
+        ukuran = Ukuran(skpd=skpd)
+        ukuran.panjang_1 = data.get('panjang_1')
+        ukuran.lebar_1 = data.get('lebar_1')
+        ukuran.panjang_2 = data.get('panjang_2')
+        ukuran.lebar_2 = data.get('lebar_2')
+        ukuran.panjang_3 = data.get('panjang_3')
+        ukuran.lebar_3 = data.get('lebar_3')
+        ukuran.panjang_4 = data.get('panjang_4')
+        ukuran.lebar_4 = data.get('lebar_4')
+        ukuran.save()
+
+    def form_valid(self, form):
+        data = form.cleaned_data
+        self.create_new_SKPD(data)
+        return super().form_valid(form)
+    
+    def get_success_url(self):
+        return reverse_lazy('myapp.detail_urls:detail', args=(self.kwargs['pk'],))
