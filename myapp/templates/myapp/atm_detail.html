@@ -1,0 +1,22 @@
+{% if atm_detail %}
+    <h1>{{ atm_detail|get_dict_item:'tempat_pemasangan' }}</h1>
+    <h1>{{ atm_detail|get_dict_item:'lokasi_pemasangan' }}</h1>
+    <h1>{{ atm_detail|get_dict_item:'atm_id' }}</h1>
+
+    {% with skpd_list=atm_detail|get_dict_item:'skpd_list' %}
+        {% if skpd_list %}
+            <ol>
+            {% for skpd in skpd_list %}
+                <li>Masa Berlaku: {{ skpd.masa_berlaku_awal }} s.d. {{ skpd.masa_berlaku_akhir }},
+                    Comment: {{ skpd.comment }},
+                    Nilai Sewa Reklame: Rp{{ skpd.nilai_sewa }}
+                </li>
+            {% endfor %}
+            </ol>
+        {% else %}
+            <p>No SKPDs are available.</p>
+        {% endif %}
+    {% endwith %}
+{% else %}
+    <p>No atm data.</p>
+{% endif %}

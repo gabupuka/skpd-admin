@@ -1,8 +1,8 @@
 from django.urls import path
 
-from .. import views
+from ..views import ATMDetailView
 
 app_name = 'myapp.detail_urls'
 urlpatterns = [
-    path('', views.HomepageView.as_view(), name='homepage'),
+    path('<int:pk>/', ATMDetailView.as_view(), name='detail'),
 ]
