@@ -7,10 +7,12 @@
         {% if skpd_list %}
             <ol>
             {% for skpd in skpd_list %}
-                <li>Masa Berlaku: {{ skpd.masa_berlaku_awal }} s.d. {{ skpd.masa_berlaku_akhir }},
-                    Comment: {{ skpd.comment }},
-                    Nilai Sewa Reklame: Rp{{ skpd.nilai_sewa }}
-                </li>
+                {% with comment=skpd.comment|if_none:'-' %}
+                    <li>Masa Berlaku: {{ skpd.masa_berlaku_awal }} s.d. {{ skpd.masa_berlaku_akhir }},
+                        Comment: {{ comment }},
+                        Nilai Sewa Reklame: Rp{{ skpd.nilai_sewa }}
+                    </li>
+                {% endwith %}
             {% endfor %}
             </ol>
         {% else %}

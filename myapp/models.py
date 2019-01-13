@@ -40,7 +40,11 @@ class Ukuran(models.Model):
     lebar_3     = models.DecimalField(max_digits=3, decimal_places=2)
     panjang_4   = models.DecimalField(max_digits=3, decimal_places=2)
     lebar_4     = models.DecimalField(max_digits=3, decimal_places=2)
-    total       = models.DecimalField(max_digits=3, decimal_places=2)
+
+    @property
+    def total(self):
+        result = (self.panjang_1 * self.lebar_1) + (self.panjang_2 * self.lebar_2) + (self.panjang_3 * self.lebar_3) + (self.panjang_4 * self.lebar_4)
+        return "%.2f" % result
 
     def __str__(self):
         return "%s - %sm" % (self.skpd, self.total)

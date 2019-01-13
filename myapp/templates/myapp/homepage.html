@@ -1,3 +1,6 @@
+<form action="{% url 'myapp.home_urls:create_new_atm' %}">
+    <input type="submit" value="New"/>
+</form>
 {% if homepage_list %}
     <ol>
     {% for skpd, ukuran in homepage_list %}
