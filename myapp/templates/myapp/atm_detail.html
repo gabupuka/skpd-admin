@@ -1,18 +1,26 @@
 <h1><a href="{% url 'myapp.home_urls:homepage' %}">Home</a></h1>
 
 {% if atm_detail %}
-    <h2>{{ atm_detail|get_dict_item:'tempat_pemasangan' }}</h1>
-    <h2>{{ atm_detail|get_dict_item:'lokasi_pemasangan' }}</h1>
-    <h2>{{ atm_detail|get_dict_item:'atm_id' }}</h1>
+    <h2>{{ atm_detail|get_dict_item:'tempat_pemasangan' }}</h2>
+    <h2>{{ atm_detail|get_dict_item:'lokasi_pemasangan' }}</h2>
+    <h2>{{ atm_detail|get_dict_item:'atm_id' }}</h2>
+    <a href="{% url 'myapp.detail_urls:edit_atm' atm_detail|get_dict_item:'atm_pk' %}">
+        <button>edit</button>
+    </a>
 
     {% with skpd_list=atm_detail|get_dict_item:'skpd_list' %}
         {% if skpd_list %}
             <ol>
             {% for skpd in skpd_list %}
-                {% with comment=skpd.comment|if_none:'-' %}
+                {% with comment=skpd.comment|if_none_or_empty:'-' %}
                     <li>Masa Berlaku: {{ skpd.masa_berlaku_awal }} s.d. {{ skpd.masa_berlaku_akhir }},
                         Comment: {{ comment }},
                         Nilai Sewa Reklame: Rp{{ skpd.nilai_sewa }}
+                        {% if forloop.counter != skpd_list|length %}
+                            <a href="{% url 'myapp.detail_urls:edit_skpd' atm_detail|get_dict_item:'atm_pk' skpd.no_skpd %}">
+                                <button>edit</button>
+                            </a>
+                        {% endif %}
                     </li>
                 {% endwith %}
             {% endfor %}
@@ -20,7 +28,7 @@
         {% else %}
             <p>No SKPDs are available.</p>
         {% endif %}
-        <a href="{% url 'myapp.detail_urls:create_new_skpd' atm_detail|get_dict_item:'atm_pk' %}"><button>New</button></a>
+        <a href="{% url 'myapp.detail_urls:create_new_skpd' atm_detail|get_dict_item:'atm_pk' %}"><button>New SKPD</button></a>
     {% endwith %}
 {% else %}
     <p>No atm data.</p>

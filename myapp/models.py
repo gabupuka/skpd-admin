@@ -9,7 +9,7 @@ class ATM(models.Model):
         return self.atm_id
 
 class SKPD(models.Model):
-    atm                         = models.ForeignKey(ATM, to_field='atm_id', on_delete=models.CASCADE)
+    atm                         = models.ForeignKey(ATM, on_delete=models.CASCADE)
     no_skpd                     = models.CharField(max_length=17, primary_key=True)
     nama_pemilik                = models.CharField(max_length=255)
     alamat_pemilik              = models.CharField(max_length=255)

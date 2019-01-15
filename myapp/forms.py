@@ -2,7 +2,7 @@ from django import forms
 
 from .models import ATM, SKPD, Ukuran
 
-class ATMCreateNewForm(forms.Form):
+class ATMForm(forms.Form):
     atm_id                      = forms.CharField(label='ID ATM', max_length=7)
     no_skpd                     = forms.CharField(label='Nomor SKPD', max_length=17)
     nama_pemilik                = forms.CharField(label='Nama Pemilik Reklame', max_length=255)
@@ -25,8 +25,9 @@ class ATMCreateNewForm(forms.Form):
     masa_berlaku_awal           = forms.DateField(label='Masa Pajak Reklame (Awal)')
     masa_berlaku_akhir          = forms.DateField(label='Masa Pajak Reklame (Akhir)')
     nilai_sewa                  = forms.IntegerField(label='Nilai Sewa Reklame')
+    comment                     = forms.CharField(label='Comment', widget=forms.Textarea, required=False)
 
-class SKPDCreateNewForm(forms.Form):
+class SKPDForm(forms.Form):
     no_skpd                     = forms.CharField(label='Nomor SKPD', max_length=17)
     nama_pemilik                = forms.CharField(label='Nama Pemilik Reklame', max_length=255)
     alamat_pemilik              = forms.CharField(label='Alamat', max_length=255)
@@ -48,4 +49,4 @@ class SKPDCreateNewForm(forms.Form):
     masa_berlaku_awal           = forms.DateField(label='Masa Pajak Reklame (Awal)')
     masa_berlaku_akhir          = forms.DateField(label='Masa Pajak Reklame (Akhir)')
     nilai_sewa                  = forms.IntegerField(label='Nilai Sewa Reklame')
-    comment                     = forms.CharField(label='Comment', widget=forms.Textarea)
+    comment                     = forms.CharField(label='Comment', widget=forms.Textarea, required=False)

@@ -1,5 +1,7 @@
 <h1><a href="{% url 'myapp.home_urls:homepage' %}">Home</a></h1>
-<h2>Add New ATM</h2>
+<h2>{{ title_prefix }} SKPD for:</h2>
+
+<h2>{{ atm_detail|get_dict_item:'atm_id' }}</h2>
 
 <form method="post">{% csrf_token %}
     {{ form.as_p }}
