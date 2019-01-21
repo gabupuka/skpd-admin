@@ -7,6 +7,9 @@
     <a href="{% url 'myapp.detail_urls:edit_atm' atm_detail|get_dict_item:'atm_pk' %}">
         <button>edit</button>
     </a>
+    <a href="{% url 'myapp.detail_urls:delete_atm' atm_detail|get_dict_item:'atm_pk' %}">
+        <button>hapus</button>
+    </a>
 
     {% with skpd_list=atm_detail|get_dict_item:'skpd_list' %}
         {% if skpd_list %}
@@ -19,6 +22,9 @@
                         {% if forloop.counter != skpd_list|length %}
                             <a href="{% url 'myapp.detail_urls:edit_skpd' atm_detail|get_dict_item:'atm_pk' skpd.no_skpd %}">
                                 <button>edit</button>
+                            </a>
+                            <a href="{% url 'myapp.detail_urls:delete_skpd' atm_detail|get_dict_item:'atm_pk' skpd.no_skpd %}">
+                                <button>hapus</button>
                             </a>
                         {% endif %}
                     </li>

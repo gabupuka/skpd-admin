@@ -177,6 +177,23 @@ def edit_ATM(request, pk):
 
     return render(request, 'myapp/atm_form.html', context)
 
+def delete_ATM(request, pk):
+    atm = ATM.objects.get(pk=pk)
+
+    # Submit form
+    if request.method == 'POST':
+        if request.POST.get("yes_button"):
+            atm.delete()
+            return HttpResponseRedirect(reverse('myapp.home_urls:homepage'))
+        elif request.POST.get("no_button"):
+            return HttpResponseRedirect(reverse('myapp.detail_urls:detail', args=(pk,)))
+
+    context = {
+        'atm_id': atm.atm_id
+    }
+
+    return render(request, 'myapp/atm_delete.html', context)
+
 class SKPDCreateNewView(generic.FormView):
     form_class = SKPDForm
     template_name = 'myapp/skpd_form.html'
@@ -323,3 +340,19 @@ def edit_SKPD(request, pk, no_skpd):
     }
 
     return render(request, 'myapp/skpd_form.html', context)
+
+def delete_SKPD(request, pk, no_skpd):
+    skpd = SKPD.objects.get(pk=no_skpd)
+
+    # Submit form
+    if request.method == 'POST':
+        if request.POST.get("yes_button"):
+            skpd.delete()
+
+        return HttpResponseRedirect(reverse('myapp.detail_urls:detail', args=(pk,)))
+
+    context = {
+        'no_skpd': skpd.no_skpd
+    }
+
+    return render(request, 'myapp/skpd_delete.html', context)
