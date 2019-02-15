@@ -1,14 +1,14 @@
-<h1><a href="{% url 'myapp.home_urls:homepage' %}">Home</a></h1>
+<!-- <h1><a href="{% url 'myapp.home_urls:homepage' %}">Home</a></h1>
 
 {% if atm_detail %}
     <h2>{{ atm_detail|get_dict_item:'tempat_pemasangan' }}</h2>
     <h2>{{ atm_detail|get_dict_item:'lokasi_pemasangan' }}</h2>
     <h2>{{ atm_detail|get_dict_item:'atm_id' }}</h2>
     <a href="{% url 'myapp.detail_urls:edit_atm' atm_detail|get_dict_item:'atm_pk' %}">
-        <button>edit</button>
+        <button>Edit</button>
     </a>
     <a href="{% url 'myapp.detail_urls:delete_atm' atm_detail|get_dict_item:'atm_pk' %}">
-        <button>hapus</button>
+        <button>Hapus</button>
     </a>
 
     {% with skpd_list=atm_detail|get_dict_item:'skpd_list' %}
@@ -38,4 +38,124 @@
     {% endwith %}
 {% else %}
     <p>No atm data.</p>
-{% endif %}
+{% endif %} -->
+
+<!DOCTYPE html>
+<html lang = "en">
+    <head>
+        <meta charset = "urf-8" name = "viewport" content = "width=device-width, initial-scale=1"/>
+        {% load static %}
+        <link rel="stylesheet" type="text/css" href="{% static 'myapp/css/jquery.dataTables.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'myapp/css/bootstrap3.3.7.min.css' %}">
+        <script src="{% static 'myapp/js/jquery3.3.1.min.js' %}"></script>
+        <script type="text/javascript" charset="utf8" src="{% static 'myapp/js/jquery.dataTables.js' %}"></script>
+        <script type = "text/javascript" src="{% static 'myapp/js/datatable-unsort.js' %}"></script>
+        <script src="{% static 'myapp/js/bootstrap.min.js' %}"></script>
+        <style>
+          h1 {text-align: center;}
+        </style>
+    </head>
+    <body>
+        <nav class = "navbar navbar-default" >
+            <div class = "container-fluid">
+                <a class = "navbar-brand " href="{% url 'myapp.home_urls:homepage' %}">SKPD-ADMIN</a>
+            </div>
+        </nav>
+    {% if atm_detail %}
+            <div class = "container-fluid">
+            <div class = "col well">
+                <h1 class = "text-primary">{{ atm_detail|get_dict_item:'tempat_pemasangan' }}</h1>
+                <h1 class = "text-primary">{{ atm_detail|get_dict_item:'lokasi_pemasangan' }}</h1>
+                <h1 class = "text-primary">{{ atm_detail|get_dict_item:'atm_id' }}</h1>
+
+                {% with skpd_list=atm_detail|get_dict_item:'skpd_list' %}
+                    {% if skpd_list %}
+                    <table id = "table" class = "table table-striped table-hover">
+                        <thead class = "alert-success">
+                            <tr>
+                                <th>No</th>
+                                <th>Masa Berlaku Awal</th>
+                                <th>Masa Berlaku Akhir</th>
+                                <th>Comment</th>
+                                <th>Nilai Sewa Reklame</th>
+                                <th>Customize</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for skpd in skpd_list %}
+                                {% with comment=skpd.comment|if_none_or_empty:'-' %}
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{ skpd.masa_berlaku_awal }}</td>
+                                        <td>{{ skpd.masa_berlaku_akhir }}</td>
+                                        <td>{{ comment }}</td>
+                                        <td>Rp{{ skpd.nilai_sewa }}</td>
+                                        {% if forloop.counter != skpd_list|length %}
+                                            <td>
+                                                <a href="{% url 'myapp.detail_urls:edit_skpd' atm_detail|get_dict_item:'atm_pk' skpd.no_skpd %}" class="btn btn-info btn-xs" role="button">edit</a>
+                                                <button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#deleteModal" data-inputtypemodal="SKPD" data-inputvaluemodal="{{ skpd.no_skpd }}">hapus</button>
+                                            </td>
+                                        {% else %}
+                                            <td></td>
+                                        {% endif %}
+                                    </tr>
+                                {% endwith %}
+                           {% endfor %}
+                        </tbody>
+                    </table>
+                    {% else %}
+                        <p>No SKPDs are available.</p>
+                    {% endif %}
+                    <a href="{% url 'myapp.detail_urls:create_new_skpd' atm_detail|get_dict_item:'atm_pk' %}" class="btn btn-primary" role="button">New SKPD</a>
+                    <a href="{% url 'myapp.detail_urls:edit_atm' atm_detail|get_dict_item:'atm_pk' %}" class="btn btn-info" role="button">Edit</a>
+                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal" data-inputtypemodal="ATM" data-inputvaluemodal="{{ atm_detail|get_dict_item:'atm_pk' }}">Delete</button>
+                </div>
+                </div>
+                {% endwith %}
+    {% else %}
+        <p>No atm data.</p>
+    {% endif %}
+
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="deleteModalLabel"></h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p id="question">Apakah Anda yakin akan menghapus</p>
+            <p class="text-warning"><small>Data yang telah dihapus tidak dapat dikembalikan.</small></p>
+          </div>
+          <div class="modal-footer">
+            <form method="post">{% csrf_token %}
+                <input id="inputanBuatViewValue" type="hidden" name="value" value="">
+                <input id="inputanBuatViewType" type="hidden" name="type" value="">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <input type="submit" class="btn btn-danger" name="yes_button" value="Hapus">
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="text/javascript">
+      $('#deleteModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        var inputvalue = button.data('inputvaluemodal') // Extract info from data-* attributes
+        var inputtype = button.data('inputtypemodal')
+        // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+        // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+        var modal = $(this)
+        modal.find('.modal-title').text('Deleting '+inputtype)
+        modal.find('.modal-body #question').text('Apakah Anda yakin akan menghapus '+inputtype+' - '+inputvalue+'?' )
+        modal.find('.modal-footer #inputanBuatViewValue').val(inputvalue)
+        modal.find('.modal-footer #inputanBuatViewType').val(inputtype)
+      })
+    </script>
+    </body>
+
+</html>

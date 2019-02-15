@@ -1,7 +1,72 @@
-<h1><a href="{% url 'myapp.home_urls:homepage' %}">Home</a></h1>
+<!-- <h1><a href="{% url 'myapp.home_urls:homepage' %}">Home</a></h1>
 <h2>{{ title_prefix }} ATM:</h2>
 
 <form method="post">{% csrf_token %}
     {{ form.as_p }}
     <input type="submit" value="Save">
-</form>
+</form> -->
+
+{% load widget_tweaks %}
+<!DOCTYPE html>
+<html lang = "en">
+<head>
+  <meta charset = "urf-8" name = "viewport" content = "width=device-width, initial-scale=1"/>
+  {% load static %}
+  <link rel="stylesheet" type="text/css" href="{% static 'myapp/css/bootstrap3.3.7.min.css' %}">
+</head>
+
+<body>
+  <nav class = "navbar navbar-default" >
+      <div class = "container-fluid">
+          <a class = "navbar-brand " href="{% url 'myapp.home_urls:homepage' %}">SKPD-ADMIN</a>
+      </div>
+  </nav>
+
+  <div class = "container">
+  <div class = "col-md-auto well">
+      <h3 class = "text">{{ title_prefix }} ATM:</h3>
+      <hr style = "border-top:1px dotted #000;"/>
+
+      <form method="post">
+        {% csrf_token %}
+
+        {% if form.non_field_errors %}
+          <div class="alert alert-danger" role="alert">
+            {% for error in form.non_field_errors %}
+              {{ error }}
+            {% endfor %}
+          </div>
+        {% endif %}
+
+        {% for field in form.visible_fields %}
+          <div class="form-group">
+            {{ field.label_tag }}
+
+            {% if form.is_bound %}
+              {% if field.errors %}
+                {% render_field field class="form-control is-invalid" %}
+                {% for error in field.errors %}
+                  <div class="invalid-feedback">
+                    {{ error }}
+                  </div>
+                {% endfor %}
+              {% else %}
+                {% render_field field class="form-control is-valid" %}
+              {% endif %}
+            {% else %}
+              {% render_field field class="form-control" %}
+            {% endif %}
+
+            {% if field.help_text %}
+              <small class="form-text text-muted">{{ field.help_text }}</small>
+            {% endif %}
+          </div>
+        {% endfor %}
+
+        <input type="submit" value="Save" class="btn btn-primary">
+      </form>
+
+  </div>
+  </div>
+</body>
+</html>

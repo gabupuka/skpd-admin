@@ -41,6 +41,17 @@ class ATMDetailView(generic.DetailView):
 
         return result_object
 
+    def post(self, request, pk):
+        if request.POST.get("yes_button"):
+            if request.POST['type'] == 'SKPD':
+                skpd = SKPD.objects.get(pk=request.POST['value'])
+                skpd.delete()
+                return HttpResponseRedirect(reverse('myapp.detail_urls:detail', args=(pk,)))
+            elif request.POST['type'] == 'ATM':
+                atm = ATM.objects.get(pk=request.POST['value'])
+                atm.delete()
+                return HttpResponseRedirect(reverse('myapp.home_urls:homepage'))
+
 class ATMCreateNewView(generic.FormView):
     form_class = ATMForm
     template_name = 'myapp/atm_form.html'
@@ -248,7 +259,7 @@ class SKPDCreateNewView(generic.FormView):
         data = form.cleaned_data
         self.create_new_SKPD(data)
         return super().form_valid(form)
-    
+
     def get_success_url(self):
         return reverse_lazy('myapp.detail_urls:detail', args=(self.kwargs['pk'],))
 
