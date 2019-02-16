@@ -1,7 +1,8 @@
 from django.db import models
 
 class ATM(models.Model):
-    atm_id = models.CharField(max_length=7, unique=True)
+    atm_id = models.CharField(max_length=10, unique=True)
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
         if self.id == None:

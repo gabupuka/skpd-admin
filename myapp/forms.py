@@ -3,7 +3,7 @@ from django import forms
 from .models import ATM, SKPD, Ukuran
 
 class ATMForm(forms.Form):
-    atm_id                      = forms.CharField(label='ID ATM', max_length=7)
+    atm_id                      = forms.CharField(label='ID ATM', max_length=10)
     no_skpd                     = forms.CharField(label='Nomor SKPD', max_length=17)
     nama_pemilik                = forms.CharField(label='Nama Pemilik Reklame', max_length=255)
     alamat_pemilik              = forms.CharField(label='Alamat', max_length=255)

@@ -17,7 +17,7 @@ class HomepageView(generic.ListView):
         for atm in atm_list:
             skpd = atm.skpd_set.order_by('-masa_berlaku_akhir')[0]
             ukuran_skpd = Ukuran.objects.get(skpd=skpd)
-            result_item = (skpd, ukuran_skpd)
+            result_item = (atm, skpd, ukuran_skpd)
             result_list.append(result_item)
 
         return result_list

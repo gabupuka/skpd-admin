@@ -1,21 +1,3 @@
-<!-- <h1><a href="{% url 'myapp.home_urls:homepage' %}">Home</a></h1>
-
-<a href="{% url 'myapp.home_urls:create_new_atm' %}"><button>New ATM</button></a>
-{% if homepage_list %}
-    <ol>
-    {% for skpd, ukuran in homepage_list %}
-        <li><a href="{% url 'myapp.detail_urls:detail' skpd.atm.id %}">
-            ATM ID: {{ skpd.atm.atm_id }},
-            NO SKPD: {{ skpd.no_skpd }},
-            Jatuh Tempo: {{ skpd.masa_berlaku_akhir }},
-            Ukuran: {{ ukuran.total }} m
-        </a></li>
-    {% endfor %}
-    </ol>
-{% else %}
-    <p>No atms are available.</p>
-{% endif %} -->
-
 <!DOCTYPE html>
 <html lang = "en">
     <head>
@@ -48,16 +30,18 @@
                     <th>Lokasi Pemasangan</th>
                     <th>Jatuh Tempo</th>
                     <th>Ukuran</th>
+                    <th>Status</th>
                 </tr>
             </thead>
             <tbody>
-                {% for skpd, ukuran in homepage_list %}
+                {% for atm, skpd, ukuran in homepage_list %}
                 <tr>
-                    <td><a href="{% url 'myapp.detail_urls:detail' skpd.atm.id %}"/>{{ skpd.atm.atm_id }}</td>
+                    <td><a href="{% url 'myapp.detail_urls:detail' skpd.atm.id %}"/>{{ atm.atm_id }}</td>
                     <td>{{ skpd.alamat_pemilik }}</td>
                     <td>{{ skpd.lokasi_pemasangan}}</td>
                     <td>{{ skpd.masa_berlaku_akhir }}</td>
                     <td>{{ ukuran.total }}</td>
+                    <td>{{ atm.is_active }}</td>
                 </tr>
                {% endfor %}
             </tbody>
