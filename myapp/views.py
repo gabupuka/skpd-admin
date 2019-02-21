@@ -78,6 +78,7 @@ class ATMCreateNewView(generic.FormView):
         skpd.masa_berlaku_awal = data.get('masa_berlaku_awal')
         skpd.masa_berlaku_akhir = data.get('masa_berlaku_akhir')
         skpd.nilai_sewa = data.get('nilai_sewa')
+        skpd.pdf_file = self.request.FILES.get('pdf_file', skpd.pdf_file)
         skpd.comment = data.get('comment')
         skpd.save()
 
@@ -127,6 +128,7 @@ def edit_ATM(request, pk):
             'masa_berlaku_awal': skpd.masa_berlaku_awal,
             'masa_berlaku_akhir': skpd.masa_berlaku_akhir,
             'nilai_sewa': skpd.nilai_sewa,
+            'pdf_file': skpd.pdf_file,
             'comment': skpd.comment
         }
 
@@ -134,13 +136,7 @@ def edit_ATM(request, pk):
         atm.atm_id = data.get('atm_id')
         atm.save()
 
-        no_skpd = data.get('no_skpd')
-        if skpd.no_skpd != no_skpd:
-            atm = ATM.objects.get(pk=pk)
-            skpd.delete()
-            skpd = SKPD(atm=atm, no_skpd=no_skpd)
-        else:
-            skpd.no_skpd = no_skpd
+        skpd.no_skpd = data.get('no_skpd')
         skpd.nama_pemilik = data.get('nama_pemilik')
         skpd.alamat_pemilik = data.get('alamat_pemilik')
         skpd.area_koordinasi_pemilik = data.get('area_koordinasi_pemilik')
@@ -153,6 +149,7 @@ def edit_ATM(request, pk):
         skpd.masa_berlaku_awal = data.get('masa_berlaku_awal')
         skpd.masa_berlaku_akhir = data.get('masa_berlaku_akhir')
         skpd.nilai_sewa = data.get('nilai_sewa')
+        skpd.pdf_file = request.FILES.get('pdf_file', skpd.pdf_file)
         skpd.comment = data.get('comment')
         skpd.save()
 
@@ -169,7 +166,7 @@ def edit_ATM(request, pk):
 
     # Submit form
     if request.method == 'POST':
-        form = ATMForm(request.POST)
+        form = ATMForm(request.POST, request.FILES)
         if form.is_valid():
             data = form.cleaned_data
             edit_ATM_with_latest_SKPD(atm, skpd, data)
@@ -241,6 +238,7 @@ class SKPDCreateNewView(generic.FormView):
         skpd.masa_berlaku_awal = data.get('masa_berlaku_awal')
         skpd.masa_berlaku_akhir = data.get('masa_berlaku_akhir')
         skpd.nilai_sewa = data.get('nilai_sewa')
+        skpd.pdf_file = self.request.FILES.get('pdf_file', skpd.pdf_file)
         skpd.comment = data.get('comment')
         skpd.save()
 
@@ -263,8 +261,8 @@ class SKPDCreateNewView(generic.FormView):
     def get_success_url(self):
         return reverse_lazy('myapp.detail_urls:detail', args=(self.kwargs['pk'],))
 
-def edit_SKPD(request, pk, no_skpd):
-    skpd = SKPD.objects.get(pk=no_skpd)
+def edit_SKPD(request, pk, pk_skpd):
+    skpd = SKPD.objects.get(pk=pk_skpd)
 
     def get_SKPD_data():
         return {
@@ -289,17 +287,12 @@ def edit_SKPD(request, pk, no_skpd):
             'masa_berlaku_awal': skpd.masa_berlaku_awal,
             'masa_berlaku_akhir': skpd.masa_berlaku_akhir,
             'nilai_sewa': skpd.nilai_sewa,
+            'pdf_file': skpd.pdf_file,
             'comment': skpd.comment
         }
 
     def edit_SKPD(skpd, data):
-        no_skpd = data.get('no_skpd')
-        if skpd.no_skpd != no_skpd:
-            atm = ATM.objects.get(pk=pk)
-            skpd.delete()
-            skpd = SKPD(atm=atm, no_skpd=no_skpd)
-        else:
-            skpd.no_skpd = no_skpd
+        skpd.no_skpd = data.get('no_skpd')
         skpd.nama_pemilik = data.get('nama_pemilik')
         skpd.alamat_pemilik = data.get('alamat_pemilik')
         skpd.area_koordinasi_pemilik = data.get('area_koordinasi_pemilik')
@@ -312,6 +305,7 @@ def edit_SKPD(request, pk, no_skpd):
         skpd.masa_berlaku_awal = data.get('masa_berlaku_awal')
         skpd.masa_berlaku_akhir = data.get('masa_berlaku_akhir')
         skpd.nilai_sewa = data.get('nilai_sewa')
+        skpd.pdf_file = request.FILES.get('pdf_file', skpd.pdf_file)
         skpd.comment = data.get('comment')
         skpd.save()
 
@@ -328,7 +322,7 @@ def edit_SKPD(request, pk, no_skpd):
 
     # Submit form
     if request.method == 'POST':
-        form = SKPDForm(request.POST)
+        form = SKPDForm(request.POST, request.FILES)
         if form.is_valid():
             data = form.cleaned_data
             edit_SKPD(skpd, data)
@@ -352,8 +346,8 @@ def edit_SKPD(request, pk, no_skpd):
 
     return render(request, 'myapp/skpd_form.html', context)
 
-def delete_SKPD(request, pk, no_skpd):
-    skpd = SKPD.objects.get(pk=no_skpd)
+def delete_SKPD(request, pk, pk_skpd):
+    skpd = SKPD.objects.get(pk=pk_skpd)
 
     # Submit form
     if request.method == 'POST':
@@ -367,3 +361,11 @@ def delete_SKPD(request, pk, no_skpd):
     }
 
     return render(request, 'myapp/skpd_delete.html', context)
+
+def download_pdf_file(request, pk, pk_skpd, file_name):
+    skpd = SKPD.objects.get(pk=pk_skpd)
+
+    response = HttpResponse(skpd.pdf_file, content_type='application/pdf')
+    response['Content-Disposition'] = 'inline; filename=%s' % file_name
+
+    return response

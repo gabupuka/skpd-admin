@@ -20,10 +20,10 @@
                         Comment: {{ comment }},
                         Nilai Sewa Reklame: Rp{{ skpd.nilai_sewa }}
                         {% if forloop.counter != skpd_list|length %}
-                            <a href="{% url 'myapp.detail_urls:edit_skpd' atm_detail|get_dict_item:'atm_pk' skpd.no_skpd %}">
+                            <a href="{% url 'myapp.detail_urls:edit_skpd' atm_detail|get_dict_item:'atm_pk' skpd.id %}">
                                 <button>edit</button>
                             </a>
-                            <a href="{% url 'myapp.detail_urls:delete_skpd' atm_detail|get_dict_item:'atm_pk' skpd.no_skpd %}">
+                            <a href="{% url 'myapp.detail_urls:delete_skpd' atm_detail|get_dict_item:'atm_pk' skpd.id %}">
                                 <button>hapus</button>
                             </a>
                         {% endif %}
@@ -78,6 +78,7 @@
                                 <th>Masa Berlaku Akhir</th>
                                 <th>Comment</th>
                                 <th>Nilai Sewa Reklame</th>
+                                <th>PDF</th>
                                 <th>Customize</th>
                             </tr>
                         </thead>
@@ -86,18 +87,23 @@
                             {% for skpd in skpd_list %}
                                 {% with comment=skpd.comment|if_none_or_empty:'-' %}
                                     <tr>
-                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{ forloop.counter }}.</td>
                                         <td>{{ skpd.masa_berlaku_awal }}</td>
                                         <td>{{ skpd.masa_berlaku_akhir }}</td>
                                         <td>{{ comment }}</td>
                                         <td>Rp{{ skpd.nilai_sewa }}</td>
+                                        {% if skpd.pdf_file %}
+                                            <td><a href="{% url 'myapp.detail_urls:download_pdf_file' atm_detail|get_dict_item:'atm_pk' skpd.id skpd.pdf_file_name %}">{{ skpd.pdf_file_name }}</a></td>
+                                        {% else %}
+                                            <td>-</td>
+                                        {% endif %}
                                         {% if forloop.counter != skpd_list|length %}
                                             <td>
-                                                <a href="{% url 'myapp.detail_urls:edit_skpd' atm_detail|get_dict_item:'atm_pk' skpd.no_skpd %}" class="btn btn-info btn-xs" role="button">edit</a>
-                                                <button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#deleteModal" data-inputtypemodal="SKPD" data-inputvaluemodal="{{ skpd.no_skpd }}">hapus</button>
+                                                <a href="{% url 'myapp.detail_urls:edit_skpd' atm_detail|get_dict_item:'atm_pk' skpd.id %}" class="btn btn-info btn-xs" role="button">edit</a>
+                                                <button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#deleteModal" data-inputtypemodal="SKPD" data-inputvaluemodal="{{ skpd.id }}">hapus</button>
                                             </td>
                                         {% else %}
-                                            <td></td>
+                                            <td>-</td>
                                         {% endif %}
                                     </tr>
                                 {% endwith %}

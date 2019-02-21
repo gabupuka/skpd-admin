@@ -25,6 +25,7 @@ class ATMForm(forms.Form):
     masa_berlaku_awal           = forms.DateField(label='Masa Pajak Reklame (Awal)')
     masa_berlaku_akhir          = forms.DateField(label='Masa Pajak Reklame (Akhir)')
     nilai_sewa                  = forms.IntegerField(label='Nilai Sewa Reklame')
+    pdf_file                    = forms.FileField(label='PDF File', required=False)
     comment                     = forms.CharField(label='Comment', widget=forms.Textarea, required=False)
 
 class SKPDForm(forms.Form):
@@ -49,4 +50,5 @@ class SKPDForm(forms.Form):
     masa_berlaku_awal           = forms.DateField(label='Masa Pajak Reklame (Awal)')
     masa_berlaku_akhir          = forms.DateField(label='Masa Pajak Reklame (Akhir)')
     nilai_sewa                  = forms.IntegerField(label='Nilai Sewa Reklame')
+    pdf_file                    = forms.FileField(label='PDF File', required=False)
     comment                     = forms.CharField(label='Comment', widget=forms.Textarea, required=False)
