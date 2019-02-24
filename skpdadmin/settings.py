@@ -129,5 +129,6 @@ MEDIA_URL = '/media/'
 
 # Login
 
+LOGIN_URL = 'custom_login'
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'

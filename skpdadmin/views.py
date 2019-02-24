@@ -24,4 +24,4 @@ def home_view(request):
     if request.user.is_authenticated:
         return HttpResponseRedirect(reverse('myapp.home_urls:homepage'))
     else:
-        return HttpResponseRedirect(reverse('login'))
+        return HttpResponseRedirect(reverse('custom_login'))

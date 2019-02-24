@@ -32,7 +32,7 @@ class SKPD(models.Model):
     masa_berlaku_awal           = models.DateField()
     masa_berlaku_akhir          = models.DateField()
     nilai_sewa                  = models.IntegerField()
-    pdf_file                    = models.FileField(storage=OverwriteStorage(), upload_to=skpd_pdf_file_path, default=None, blank=True)
+    pdf_file                    = models.FileField(storage=OverwriteStorage(), upload_to=skpd_pdf_file_path, default=None, blank=True, null=True)
     comment                     = models.TextField(default=None, blank=True, null=True)
 
     def save(self, *args, **kwargs):

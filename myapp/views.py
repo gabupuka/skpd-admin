@@ -14,7 +14,7 @@ class HomepageView(LoginRequiredMixin, generic.ListView):
     redirect_field_name = None
 
     def get_queryset(self):
-        atm_list = ATM.objects.order_by('-id')[:10]
+        atm_list = ATM.objects.order_by('-id')
         result_list = []
 
         for atm in atm_list:
@@ -111,7 +111,7 @@ class ATMCreateNewView(LoginRequiredMixin, generic.FormView):
 
 def edit_ATM(request, pk):
     if not request.user.is_authenticated:
-        return redirect(reverse('login'))
+        return redirect(reverse('custom_login'))
     elif not in_group(request.user, 'Admin'):
         return redirect(reverse('myapp.home_urls:homepage'))
     else:
@@ -203,7 +203,7 @@ def edit_ATM(request, pk):
 
 def delete_ATM(request, pk):
     if not request.user.is_authenticated:
-        return redirect(reverse('login'))
+        return redirect(reverse('custom_login'))
     elif not in_group(request.user, 'Admin'):
         return redirect(reverse('myapp.home_urls:homepage'))
     else:
@@ -291,7 +291,7 @@ class SKPDCreateNewView(LoginRequiredMixin, generic.FormView):
 
 def edit_SKPD(request, pk, pk_skpd):
     if not request.user.is_authenticated:
-        return redirect(reverse('login'))
+        return redirect(reverse('custom_login'))
     elif not in_group(request.user, 'Admin'):
         return redirect(reverse('myapp.home_urls:homepage'))
     else:
@@ -381,7 +381,7 @@ def edit_SKPD(request, pk, pk_skpd):
 
 def delete_SKPD(request, pk, pk_skpd):
     if not request.user.is_authenticated:
-        return redirect(reverse('login'))
+        return redirect(reverse('custom_login'))
     elif not in_group(request.user, 'Admin'):
         return redirect(reverse('myapp.home_urls:homepage'))
     else:
@@ -402,7 +402,7 @@ def delete_SKPD(request, pk, pk_skpd):
 
 def download_pdf_file(request, pk, pk_skpd, file_name):
     if not request.user.is_authenticated:
-        return redirect(reverse('login'))
+        return redirect(reverse('custom_login'))
     else:
         skpd = SKPD.objects.get(pk=pk_skpd)
 
