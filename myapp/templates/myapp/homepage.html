@@ -14,6 +14,8 @@
     <nav class = "navbar navbar-default" >
         <div class = "container-fluid">
             <a class = "navbar-brand " href="{% url 'myapp.home_urls:homepage' %}">SKPD-ADMIN</a>
+            <a class = "navbar-brand ">{{ user.first_name }} {{ user.last_name }}</a>
+            <a class = "navbar-brand " href="{% url 'logout' %}">Logout</a>
         </div>
     </nav>
     <div class = "col-md-3"></div>
@@ -46,7 +48,9 @@
                {% endfor %}
             </tbody>
         </table>
-        <a href="{% url 'myapp.home_urls:create_new_atm' %}" class="btn btn-info" role="button">New</a>
+        {% if request.user|in_group:'Admin' %}
+            <a href="{% url 'myapp.home_urls:create_new_atm' %}" class="btn btn-info" role="button">New</a>
+        {% endif %}
     </div>
     </div>
 

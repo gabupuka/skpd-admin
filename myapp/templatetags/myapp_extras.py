@@ -10,3 +10,7 @@ def if_none_or_empty(item, new_value):
         return new_value
     else:
         return item
+
+@register.filter
+def in_group(user, group_name):
+    return user.groups.all().filter(name=group_name).exists()
