@@ -45,6 +45,7 @@ class ATMDetailView(LoginRequiredMixin, generic.DetailView):
 
         return result_object
 
+    # Delete ATM or SKPD
     def post(self, request, pk):
         if request.POST.get("yes_button"):
             if request.POST['type'] == 'SKPD':
@@ -201,28 +202,6 @@ def edit_ATM(request, pk):
 
         return render(request, 'myapp/atm_form.html', context)
 
-def delete_ATM(request, pk):
-    if not request.user.is_authenticated:
-        return redirect(reverse('custom_login'))
-    elif not in_group(request.user, 'Admin'):
-        return redirect(reverse('myapp.home_urls:homepage'))
-    else:
-        atm = ATM.objects.get(pk=pk)
-
-        # Submit form
-        if request.method == 'POST':
-            if request.POST.get("yes_button"):
-                atm.delete()
-                return redirect(reverse('myapp.home_urls:homepage'))
-            elif request.POST.get("no_button"):
-                return redirect(reverse('myapp.detail_urls:detail', args=(pk,)))
-
-        context = {
-            'atm_id': atm.atm_id
-        }
-
-        return render(request, 'myapp/atm_delete.html', context)
-
 class SKPDCreateNewView(LoginRequiredMixin, generic.FormView):
     form_class = SKPDForm
     template_name = 'myapp/skpd_form.html'
@@ -378,27 +357,6 @@ def edit_SKPD(request, pk, pk_skpd):
         }
 
         return render(request, 'myapp/skpd_form.html', context)
-
-def delete_SKPD(request, pk, pk_skpd):
-    if not request.user.is_authenticated:
-        return redirect(reverse('custom_login'))
-    elif not in_group(request.user, 'Admin'):
-        return redirect(reverse('myapp.home_urls:homepage'))
-    else:
-        skpd = SKPD.objects.get(pk=pk_skpd)
-
-        # Submit form
-        if request.method == 'POST':
-            if request.POST.get("yes_button"):
-                skpd.delete()
-
-            return redirect(reverse('myapp.detail_urls:detail', args=(pk,)))
-
-        context = {
-            'no_skpd': skpd.no_skpd
-        }
-
-        return render(request, 'myapp/skpd_delete.html', context)
 
 def download_pdf_file(request, pk, pk_skpd, file_name):
     if not request.user.is_authenticated:
