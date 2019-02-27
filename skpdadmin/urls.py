@@ -24,5 +24,5 @@ urlpatterns = [
     path('detail/', include('myapp.urls.detail_urls')),
     path('accounts/login', custom_login, name='custom_login'),
     path('accounts/', include('django.contrib.auth.urls')),
-    path('admin-dashboard', admin.site.urls),
+    path('admin-dashboard/', admin.site.urls),
 ]
