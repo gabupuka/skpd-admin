@@ -2,21 +2,24 @@
 <html lang = "en">
     <head>
         <meta charset = "urf-8" name = "viewport" content = "width=device-width, initial-scale=1"/>
+        {% load humanize %}
         {% load static %}
         <link rel="stylesheet" type="text/css" href="{% static 'myapp/css/jquery.dataTables.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'myapp/css/bootstrap3.3.7.min.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'myapp/css/atmdetail.css' %}">
         <script src="{% static 'myapp/js/jquery3.3.1.min.js' %}"></script>
         <script type="text/javascript" charset="utf8" src="{% static 'myapp/js/jquery.dataTables.js' %}"></script>
         <script type = "text/javascript" src="{% static 'myapp/js/datatable-unsort.js' %}"></script>
         <script src="{% static 'myapp/js/bootstrap.min.js' %}"></script>
-        <style>
-          h1 {text-align: center;}
-        </style>
+        <script type = "text/javascript" src="{% static 'myapp/js/tooltip.js' %}"></script>        
+        <title>ATM {{atm_detail|get_dict_item:'atm_id'}} | SKPD-ADMIN</title>
     </head>
     <body>
         <nav class = "navbar navbar-default" >
             <div class = "container-fluid">
                 <a class = "navbar-brand " href="{% url 'myapp.home_urls:homepage' %}">SKPD-ADMIN</a>
+                <a class = "navbar-brand">{{ user.first_name }} {{ user.last_name }}</a>
+                <a class = "navbar-brand pull-right" href="{% url 'logout' %}">Logout</a>
             </div>
         </nav>
     {% if atm_detail %}
@@ -25,6 +28,52 @@
                 <h1 class = "text-primary">{{ atm_detail|get_dict_item:'tempat_pemasangan' }}</h1>
                 <h1 class = "text-primary">{{ atm_detail|get_dict_item:'lokasi_pemasangan' }}</h1>
                 <h1 class = "text-primary">{{ atm_detail|get_dict_item:'atm_id' }}</h1>
+                <div class = "pull-right form-group">
+                    <div class="wrapper">
+                        <div class="box1">Status ATM:</div>
+                    {% if atm_detail|get_dict_item:'is_active' is True %}
+                        {% if request.user|in_group:'Admin' %}     
+                            <div class="box2">
+                                <label class="switch">
+                                    <input id="bluecheck" type="checkbox" checked data-toggle="modal" data-target="#deleteModal" data-inputtypemodal="status" data-inputbooleanmodal=false data-inputvaluemodal="{{ atm_detail|get_dict_item:'atm_pk' }}"> 
+                                    <div class="slider round">
+                                        <span class="on">Aktif</span><span class="off">Nonaktif</span>
+                                    </div>
+                                </label>
+                            </div>
+                        {% else %}
+                            <div class="box2">
+                                <label class="switchUser">
+                                    <input id="bluecheck" type="checkbox" checked data-toggle="modal" data-target="#deleteModal" data-inputtypemodal="status" data-inputbooleanmodal=false data-inputvaluemodal="{{ atm_detail|get_dict_item:'atm_pk' }}"> 
+                                    <div class="slider round">
+                                        <span class="on">Aktif</span><span class="off">Nonaktif</span>
+                                    </div>
+                                </label>
+                            </div>
+                        {% endif %}
+                    {% elif atm_detail|get_dict_item:'is_active' is False %}
+                        {% if request.user|in_group:'Admin' %}                                             
+                            <div class="box2">                                
+                                <label class="switch">
+                                    <input id="graycheck" type="checkbox" data-toggle="modal" data-target="#deleteModal" data-inputtypemodal="status" data-inputbooleanmodal=true data-inputvaluemodal="{{ atm_detail|get_dict_item:'atm_pk' }}">
+                                    <div class="slider round">
+                                        <span class="on">Aktif</span><span class="off">Nonaktif</span>
+                                    </div>
+                                </label>
+                            </div>
+                        {% else %}
+                            <div class="box2">                                
+                                <label class="switchUser">
+                                    <input id="graycheck" type="checkbox" data-toggle="modal" data-target="#deleteModal" data-inputtypemodal="status" data-inputbooleanmodal=true data-inputvaluemodal="{{ atm_detail|get_dict_item:'atm_pk' }}">
+                                    <div class="slider round">
+                                        <span class="on">Aktif</span><span class="off">Nonaktif</span>
+                                    </div>
+                                </label>
+                            </div>
+                        {% endif %}
+                    {% endif %}                    
+                    </div>
+                </div>
 
                 {% with skpd_list=atm_detail|get_dict_item:'skpd_list' %}
                     {% if skpd_list %}
@@ -46,10 +95,10 @@
                                 {% with comment=skpd.comment|if_none_or_empty:'-' %}
                                     <tr>
                                         <td>{{ forloop.counter }}.</td>
-                                        <td>{{ skpd.masa_berlaku_awal }}</td>
-                                        <td>{{ skpd.masa_berlaku_akhir }}</td>
+                                        <td>{{ skpd.masa_berlaku_awal|date:"d-m-Y" }}</td>
+                                        <td>{{ skpd.masa_berlaku_akhir|date:"d-m-Y" }}</td>
                                         <td>{{ comment }}</td>
-                                        <td>Rp{{ skpd.nilai_sewa }}</td>
+                                        <td>Rp {{ skpd.nilai_sewa|intcomma }}</td>
                                         {% if skpd.pdf_file %}
                                             <td><a href="{% url 'myapp.detail_urls:download_pdf_file' atm_detail|get_dict_item:'atm_pk' skpd.id skpd.pdf_file_name %}">{{ skpd.pdf_file_name }}</a></td>
                                         {% else %}
@@ -57,8 +106,8 @@
                                         {% endif %}
                                         {% if request.user|in_group:'Admin' and forloop.counter != skpd_list|length %}
                                             <td>
-                                                <a href="{% url 'myapp.detail_urls:edit_skpd' atm_detail|get_dict_item:'atm_pk' skpd.id %}" class="btn btn-info btn-xs" role="button">edit</a>
-                                                <button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#deleteModal" data-inputtypemodal="SKPD" data-inputvaluemodal="{{ skpd.id }}">hapus</button>
+                                                <a href="{% url 'myapp.detail_urls:edit_skpd' atm_detail|get_dict_item:'atm_pk' skpd.id %}" class="btn btn-info btn-xs" role="button">Ubah</a>
+                                                <button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#deleteModal" data-inputtypemodal="SKPD" data-popupvalue="{{ skpd.no_skpd }}" data-inputvaluemodal="{{ skpd.id }}">Hapus</button>
                                             </td>
                                         {% else %}
                                             <td>-</td>
@@ -72,9 +121,9 @@
                         <p>No SKPDs are available.</p>
                     {% endif %}
                     {% if request.user|in_group:'Admin' %}
-                        <a href="{% url 'myapp.detail_urls:create_new_skpd' atm_detail|get_dict_item:'atm_pk' %}" class="btn btn-primary" role="button">New SKPD</a>
-                        <a href="{% url 'myapp.detail_urls:edit_atm' atm_detail|get_dict_item:'atm_pk' %}" class="btn btn-info" role="button">Edit</a>
-                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal" data-inputtypemodal="ATM" data-inputvaluemodal="{{ atm_detail|get_dict_item:'atm_pk' }}">Delete</button>
+                        <a href="{% url 'myapp.detail_urls:create_new_skpd' atm_detail|get_dict_item:'atm_pk' %}" class="btn btn-primary" role="button">Tambah SKPD Baru</a>
+                        <a href="{% url 'myapp.detail_urls:edit_atm' atm_detail|get_dict_item:'atm_pk' %}" class="btn btn-info" role="button">Ubah</a>
+                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal" data-inputtypemodal="ATM" data-popupvalue="{{ atm_detail|get_dict_item:'atm_id' }}" data-inputvaluemodal="{{ atm_detail|get_dict_item:'atm_pk' }}">Hapus</button>                        
                     {% endif %}
                 </div>
                 </div>
@@ -94,14 +143,15 @@
           </div>
           <div class="modal-body">
             <p id="question">Apakah Anda yakin akan menghapus</p>
-            <p class="text-warning"><small>Data yang telah dihapus tidak dapat dikembalikan.</small></p>
+            <p id="warning" class="text-warning"><small>Data yang telah dihapus tidak dapat dikembalikan.</small></p>
           </div>
           <div class="modal-footer">
             <form method="post">{% csrf_token %}
                 <input id="inputanBuatViewValue" type="hidden" name="value" value="">
                 <input id="inputanBuatViewType" type="hidden" name="type" value="">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <input type="submit" class="btn btn-danger" name="yes_button" value="Hapus">
+                <input id="inputanBuatViewBoolean" type="hidden" name="boolean" value="">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Tidak</button>
+                <input type="submit" class="btn btn-danger" name="yes_button" value="Ya">
             </form>
           </div>
         </div>
@@ -113,14 +163,33 @@
         var button = $(event.relatedTarget) // Button that triggered the modal
         var inputvalue = button.data('inputvaluemodal') // Extract info from data-* attributes
         var inputtype = button.data('inputtypemodal')
-        // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-        // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-        var modal = $(this)
-        modal.find('.modal-title').text('Deleting '+inputtype)
-        modal.find('.modal-body #question').text('Apakah Anda yakin akan menghapus '+inputtype+' - '+inputvalue+'?' )
+        var popupvalue = button.data('popupvalue') //fix for incorrect modal value        
+        var modal = $(this)        
+        if (inputtype == 'status'){
+            var inputboolean = button.data('inputbooleanmodal')
+            modal.find('.modal-body #warning').text('')
+            modal.find('.modal-footer #inputanBuatViewBoolean').val(inputboolean)
+            if (inputboolean == false) {
+                modal.find('.modal-title').text('Menonaktifkan ATM')
+                modal.find('.modal-body #question').text('Apakah Anda yakin akan menonaktifkan atm ini?' )                
+            } else {
+                modal.find('.modal-title').text('Mengaktifkan ATM')
+                modal.find('.modal-body #question').text('Apakah Anda yakin akan mengaktifkan atm ini?' )
+            }            
+        } else {
+            modal.find('.modal-title').text('Deleting '+inputtype)
+            modal.find('.modal-body #question').text('Apakah Anda yakin akan menghapus '+inputtype+' - '+popupvalue+'?' )
+            modal.find('.modal-body #warning').text('Data yang telah dihapus tidak dapat dikembalikan.' )
+        }
         modal.find('.modal-footer #inputanBuatViewValue').val(inputvalue)
         modal.find('.modal-footer #inputanBuatViewType').val(inputtype)
       })
+
+      $('#deleteModal').on('hidden.bs.modal', function (event) {
+        $("#bluecheck").prop("checked", true);
+        $("#graycheck").prop("checked", false);
+      })
+
     </script>
     </body>
 

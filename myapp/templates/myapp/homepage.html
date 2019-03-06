@@ -5,17 +5,19 @@
         {% load static %}
         <link rel="stylesheet" type="text/css" href="{% static 'myapp/css/jquery.dataTables.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'myapp/css/bootstrap3.3.7.min.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'myapp/css/dot.css' %}">
         <script src="{% static 'myapp/js/jquery3.3.1.min.js' %}"></script>
         <script type="text/javascript" charset="utf8" src="{% static 'myapp/js/jquery.dataTables.js' %}"></script>
         <script type = "text/javascript" src="{% static 'myapp/js/datatable-unsort.js' %}"></script>
-
+        <script type = "text/javascript" src="{% static 'myapp/js/tooltip.js' %}"></script>
+        <title>Home | SKPD-ADMIN</title>
     </head>
 <body>
     <nav class = "navbar navbar-default" >
         <div class = "container-fluid">
             <a class = "navbar-brand " href="{% url 'myapp.home_urls:homepage' %}">SKPD-ADMIN</a>
-            <a class = "navbar-brand ">{{ user.first_name }} {{ user.last_name }}</a>
-            <a class = "navbar-brand " href="{% url 'logout' %}">Logout</a>
+            <a class = "navbar-brand">{{ user.first_name }} {{ user.last_name }}</a>
+            <a class = "navbar-brand pull-right" href="{% url 'logout' %}">Logout</a>
         </div>
     </nav>
     <div class = "col-md-3"></div>
@@ -41,19 +43,22 @@
                     <td><a href="{% url 'myapp.detail_urls:detail' skpd.atm.id %}"/>{{ atm.atm_id }}</td>
                     <td>{{ skpd.alamat_pemilik }}</td>
                     <td>{{ skpd.lokasi_pemasangan}}</td>
-                    <td>{{ skpd.masa_berlaku_akhir }}</td>
+                    <td>{{ skpd.masa_berlaku_akhir|date:"d-m-Y" }}</td>
                     <td>{{ ukuran.total }}</td>
-                    <td>{{ atm.is_active }}</td>
+                    {% if atm.is_active %}
+                        <td data-order="{{atm.is_active}}"><span class="dotgreen" data-toggle="tooltip" title="Active"></span></td>
+                    {% else %}
+                        <td data-order="{{atm.is_active}}"><span class="dotred" data-toggle="tooltip" title="Inactive"></span></td>                        
+                    {% endif %}
                 </tr>
                {% endfor %}
             </tbody>
         </table>
         {% if request.user|in_group:'Admin' %}
-            <a href="{% url 'myapp.home_urls:create_new_atm' %}" class="btn btn-info" role="button">New</a>
+            <a href="{% url 'myapp.home_urls:create_new_atm' %}" class="btn btn-primary" role="button">Tambah ATM Baru</a>
         {% endif %}
     </div>
-    </div>
-
+    </div>    
 </body>
 
 </html>

@@ -1,6 +1,7 @@
 from django import forms
 
 from .models import ATM, SKPD, Ukuran
+from django.conf import settings
 
 class ATMForm(forms.Form):
     atm_id                      = forms.CharField(label='ID ATM', max_length=10)
@@ -22,8 +23,8 @@ class ATMForm(forms.Form):
     lebar_3                     = forms.DecimalField(label='Lebar', max_digits=3, decimal_places=2)
     panjang_4                   = forms.DecimalField(label='Panjang', max_digits=3, decimal_places=2)
     lebar_4                     = forms.DecimalField(label='Lebar', max_digits=3, decimal_places=2)
-    masa_berlaku_awal           = forms.DateField(label='Masa Pajak Reklame (Awal)')
-    masa_berlaku_akhir          = forms.DateField(label='Masa Pajak Reklame (Akhir)')
+    masa_berlaku_awal           = forms.DateField(label='Masa Pajak Reklame (Awal)', input_formats=settings.DATE_INPUT_FORMATS, widget=forms.widgets.DateInput(format="%d-%m-%Y"))
+    masa_berlaku_akhir          = forms.DateField(label='Masa Pajak Reklame (Akhir)', input_formats=settings.DATE_INPUT_FORMATS, widget=forms.widgets.DateInput(format="%d-%m-%Y"))
     nilai_sewa                  = forms.IntegerField(label='Nilai Sewa Reklame')
     pdf_file                    = forms.FileField(label='PDF File', required=False)
     comment                     = forms.CharField(label='Comment', widget=forms.Textarea, required=False)
@@ -47,8 +48,8 @@ class SKPDForm(forms.Form):
     lebar_3                     = forms.DecimalField(label='Lebar', max_digits=3, decimal_places=2)
     panjang_4                   = forms.DecimalField(label='Panjang', max_digits=3, decimal_places=2)
     lebar_4                     = forms.DecimalField(label='Lebar', max_digits=3, decimal_places=2)
-    masa_berlaku_awal           = forms.DateField(label='Masa Pajak Reklame (Awal)')
-    masa_berlaku_akhir          = forms.DateField(label='Masa Pajak Reklame (Akhir)')
+    masa_berlaku_awal           = forms.DateField(label='Masa Pajak Reklame (Awal)', input_formats=settings.DATE_INPUT_FORMATS, widget=forms.widgets.DateInput(format="%d-%m-%Y"))
+    masa_berlaku_akhir          = forms.DateField(label='Masa Pajak Reklame (Akhir)', input_formats=settings.DATE_INPUT_FORMATS, widget=forms.widgets.DateInput(format="%d-%m-%Y"))
     nilai_sewa                  = forms.IntegerField(label='Nilai Sewa Reklame')
     pdf_file                    = forms.FileField(label='PDF File', required=False)
     comment                     = forms.CharField(label='Comment', widget=forms.Textarea, required=False)

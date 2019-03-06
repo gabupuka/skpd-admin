@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'widget_tweaks',
+    'django.contrib.humanize',
 ]
 
 MIDDLEWARE = [
@@ -132,3 +133,15 @@ MEDIA_URL = '/media/'
 LOGIN_URL = 'custom_login'
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
+
+FORMAT_MODULE_PATH = [
+    'myapp.formats',
+]
+
+#date
+DATE_INPUT_FORMATS = [
+    '%d-%m-%Y',      # '25-10-2010'
+    '%Y-%m-%d',      # '2006-10-25'
+    '%m/%d/%Y',      # '10/25/2006'
+    '%m/%d/%y'       # '10/25/06'
+ ]      
