@@ -1,0 +1,281 @@
+{% load widget_tweaks %}
+<!DOCTYPE html>
+<html lang = "en">
+<head>
+  <meta charset = "urf-8" name = "viewport" content = "width=device-width, initial-scale=1"/>
+  {% load static %}
+  <link rel="stylesheet" type="text/css" href="{% static 'myapp/css/bootstrap3.3.7.min.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'myapp/css/datepicker.css' %}">
+  <script src="{% static 'myapp/js/jquery3.3.1.min.js' %}"></script>
+  <script src="{% static 'myapp/js/bootstrap.min.js' %}"></script>
+  <script src="{% static 'myapp/js/bootstrap-datepicker.js' %}"></script>
+  <script type="text/javascript">
+    $(function(){
+      $('.datepicker').datepicker({
+          format: 'dd-mm-yyyy'
+      });
+    });
+  </script>
+  <title>{{title_prefix}} {{atm_id}} | SKPD-ADMIN</title>
+</head>
+
+<body>
+  <nav class = "navbar navbar-default" >
+      <div class = "container-fluid">
+          <a class = "navbar-brand " href="{% url 'myapp.home_urls:homepage' %}">SKPD-ADMIN</a>
+      </div>
+  </nav>
+
+  <div class = "container">
+  <div class = "col-md-auto well">
+      <h3 class = "text">{{title_prefix}}</h3>
+      <hr style = "border-top:1px dotted #000;"/>
+
+      <form method="post" enctype="multipart/form-data">{% csrf_token %}
+
+        {{ form.errors }}
+        {{ form.non_field_errors }}
+
+        <div class="form-group row">
+          <label class="col-md-3 col-form-label">{% render_field form.atm_id.label %}</label>
+          <div class="col-md-9">
+            {% if form.is_bound %}
+              {% render_field form.atm_id class="form-control is-valid"%}
+            {% else %}
+              {% render_field form.atm_id class="form-control" placeholder=form.atm_id.label %}
+            {% endif %}
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-md-3 col-form-label">{% render_field form.no_skpd.label %}</label>
+          <div class="col-md-9">
+            {% if form.is_bound %}
+              {% render_field form.no_skpd class="form-control is-valid"%}
+            {% else %}
+              {% render_field form.no_skpd class="form-control" placeholder=form.no_skpd.label %}
+            {% endif %}
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-md-3 col-form-label">{% render_field form.nama_pemilik.label %}</label>
+          <div class="col-md-9">
+            {% if form.is_bound %}
+              {% render_field form.nama_pemilik class="form-control is-valid"%}
+            {% else %}
+              {% render_field form.nama_pemilik class="form-control" placeholder=form.nama_pemilik.label %}
+            {% endif %}
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-md-3 col-form-label">{% render_field form.alamat_pemilik.label %}</label>
+          <div class="col-md-9">
+            {% if form.is_bound %}
+              {% render_field form.alamat_pemilik class="form-control is-valid"%}
+            {% else %}
+              {% render_field form.alamat_pemilik class="form-control" placeholder=form.alamat_pemilik.label %}
+            {% endif %}
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-md-3 col-form-label">{% render_field form.area_koordinasi_pemilik.label %}</label>
+          <div class="col-md-9">
+            {% if form.is_bound %}
+              {% render_field form.area_koordinasi_pemilik class="form-control is-valid"%}
+            {% else %}
+              {% render_field form.area_koordinasi_pemilik class="form-control" placeholder=form.area_koordinasi_pemilik.label %}
+            {% endif %}
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-md-3 col-form-label">{% render_field form.isi_teks.label %}</label>
+          <div class="col-md-9">
+            {% if form.is_bound %}
+              {% render_field form.isi_teks class="form-control is-valid"%}
+            {% else %}
+              {% render_field form.isi_teks class="form-control" placeholder=form.isi_teks.label %}
+            {% endif %}
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-md-3 col-form-label">{% render_field form.tempat_pemasangan.label %}</label>
+          <div class="col-md-9">
+            {% if form.is_bound %}
+              {% render_field form.tempat_pemasangan class="form-control is-valid"%}
+            {% else %}
+              {% render_field form.tempat_pemasangan class="form-control" placeholder=form.tempat_pemasangan.label %}
+            {% endif %}
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-md-3 col-form-label">{% render_field form.lokasi_pemasangan.label %}</label>
+          <div class="col-md-9">
+            {% if form.is_bound %}
+              {% render_field form.lokasi_pemasangan class="form-control is-valid"%}
+            {% else %}
+              {% render_field form.lokasi_pemasangan class="form-control" placeholder=form.lokasi_pemasangan.label %}
+            {% endif %}
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-md-1"></label>
+          <label class="col-md-3 col-form-label">{% render_field form.kota_lokasi_pemasangan.label %}</label>
+          <div class="col-md-8">
+            {% if form.is_bound %}
+              {% render_field form.kota_lokasi_pemasangan class="form-control is-valid"%}
+            {% else %}
+              {% render_field form.kota_lokasi_pemasangan class="form-control" placeholder=form.kota_lokasi_pemasangan.label %}
+            {% endif %}
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-md-1"></label>
+          <label class="col-md-3 col-form-label">{% render_field form.kecamatan_lokasi_pemasangan.label %}</label>
+          <div class="col-md-8">
+            {% if form.is_bound %}
+              {% render_field form.kecamatan_lokasi_pemasangan class="form-control is-valid"%}
+            {% else %}
+              {% render_field form.kecamatan_lokasi_pemasangan class="form-control" placeholder=form.kecamatan_lokasi_pemasangan.label %}
+            {% endif %}
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-md-1"></label>
+          <label class="col-md-3 col-form-label">{% render_field form.kelurahan_lokasi_pemasangan.label %}</label>
+          <div class="col-md-8">
+            {% if form.is_bound %}
+              {% render_field form.kelurahan_lokasi_pemasangan class="form-control is-valid"%}
+            {% else %}
+              {% render_field form.kelurahan_lokasi_pemasangan class="form-control" placeholder=form.kelurahan_lokasi_pemasangan.label %}
+            {% endif %}
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-md-3">Ukuran</label>
+          <label for="panjang_1" class="col-md-1 col-form-label">{% render_field form.panjang_1.label %}</label>
+          <div class="col-md-2">
+            {% if form.is_bound %}
+              {% render_field form.panjang_1 class="form-control is-valid"%}
+            {% else %}
+              {% render_field form.panjang_1 class="form-control" placeholder=form.panjang_1.label %}
+            {% endif %}
+          </div>
+          <label class="col-md-1 col-form-label">{% render_field form.lebar_1.label %}</label>
+          <div class="col-md-2">
+            {% if form.is_bound %}
+              {% render_field form.lebar_1 class="form-control is-valid"%}
+            {% else %}
+              {% render_field form.lebar_1 class="form-control" placeholder=form.lebar_1.label %}
+            {% endif %}
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-md-3"></label>
+          <label class="col-md-1 col-form-label">{% render_field form.panjang_2.label %}</label>
+          <div class="col-md-2">
+            {% if form.is_bound %}
+              {% render_field form.panjang_2 class="form-control is-valid"%}
+            {% else %}
+              {% render_field form.panjang_2 class="form-control" placeholder=form.panjang_2.label %}
+            {% endif %}
+          </div>
+          <label class="col-md-1 col-form-label">{% render_field form.lebar_2.label %}</label>
+          <div class="col-md-2">
+            {% if form.is_bound %}
+              {% render_field form.lebar_2 class="form-control is-valid"%}
+            {% else %}
+              {% render_field form.lebar_2 class="form-control" placeholder=form.lebar_2.label %}
+            {% endif %}
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-md-3"></label>
+          <label class="col-md-1 col-form-label">{% render_field form.panjang_3.label %}</label>
+          <div class="col-md-2">
+            {% if form.is_bound %}
+              {% render_field form.panjang_3 class="form-control is-valid"%}
+            {% else %}
+              {% render_field form.panjang_3 class="form-control" placeholder=form.panjang_3.label %}
+            {% endif %}
+          </div>
+          <label class="col-md-1 col-form-label">{% render_field form.lebar_3.label %}</label>
+          <div class="col-md-2">
+            {% if form.is_bound %}
+              {% render_field form.lebar_3 class="form-control is-valid"%}
+            {% else %}
+              {% render_field form.lebar_3 class="form-control" placeholder=form.lebar_3.label %}
+            {% endif %}
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-md-3"></label>
+          <label class="col-md-1 col-form-label">{% render_field form.panjang_4.label %}</label>
+          <div class="col-md-2">
+            {% if form.is_bound %}
+              {% render_field form.panjang_4 class="form-control is-valid"%}
+            {% else %}
+              {% render_field form.panjang_4 class="form-control" placeholder=form.panjang_4.label %}
+            {% endif %}
+          </div>
+          <label class="col-md-1 col-form-label">{% render_field form.lebar_4.label %}</label>
+          <div class="col-md-2">
+            {% if form.is_bound %}
+              {% render_field form.lebar_4 class="form-control is-valid"%}
+            {% else %}
+              {% render_field form.lebar_4 class="form-control" placeholder=form.lebar_4.label %}
+            {% endif %}
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-md-3 col-form-label">Masa Pajak Reklame</label>
+          <div class="col-md-3">
+            {% if form.is_bound %}
+              {% render_field form.masa_berlaku_awal class="form-control is-valid"%}
+            {% else %}
+              {% render_field form.masa_berlaku_awal class="form-control datepicker" placeholder=form.masa_berlaku_awal.label %}
+            {% endif %}
+          </div>
+          <label class="col-md-1">s/d</label>
+          <div class="col-md-3">
+            {% if form.is_bound %}
+              {% render_field form.masa_berlaku_akhir class="form-control is-valid"%}
+            {% else %}
+              {% render_field form.masa_berlaku_akhir class="form-control datepicker" placeholder=form.masa_berlaku_akhir.label %}
+            {% endif %}
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-md-3 col-form-label">{% render_field form.nilai_sewa.label %}</label>
+          <div class="col-md-3">
+            {% if form.is_bound %}
+              {% render_field form.nilai_sewa class="form-control is-valid"%}
+            {% else %}
+              {% render_field form.nilai_sewa class="form-control" placeholder=form.nilai_sewa.label %}
+            {% endif %}
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-md-3 col-form-label">{% render_field form.pdf_file.label %}</label>
+          <div class="col-md-3">
+            {% if form.is_bound %}
+              {% render_field form.pdf_file class="form-control is-valid"%}
+            {% else %}
+              {% render_field form.pdf_file class="form-control" placeholder=form.pdf_file.label %}
+            {% endif %}
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-md-3 col-form-label">{% render_field form.comment.label %}</label>
+          <div class="col-md-9">
+            {% if form.is_bound %}
+              {% render_field form.comment class="form-control is-valid"%}
+            {% else %}
+              {% render_field form.comment class="form-control" placeholder=form.comment.label %}
+            {% endif %}
+          </div>
+        </div>
+        <input type="submit" value="Simpan" class="btn btn-primary">
+      </form>      
+  </div>
+  </div>
+</body>
+</html>

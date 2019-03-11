@@ -33,12 +33,15 @@ ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
 # Application definition
 
 INSTALLED_APPS = [
+    'myapp.apps.MyAppConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'widget_tweaks',
+    'django.contrib.humanize',
 ]
 
 MIDDLEWARE = [
@@ -56,7 +59,9 @@ ROOT_URLCONF = 'skpdadmin.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'templates')
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -76,7 +81,7 @@ WSGI_APPLICATION = 'skpdadmin.wsgi.application'
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
 DATABASES = {
-    'default': dj_database_url.config(default=config('DATABASE_URL'))
+    'default': dj_database_url.parse(config('DATABASE_URL'), conn_max_age=300)
 }
 
 
@@ -104,7 +109,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Jakarta'
 
 USE_I18N = True
 
@@ -117,3 +122,27 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+
+# Media
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+
+# Login
+
+LOGIN_URL = 'custom_login'
+LOGIN_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = 'home'
+
+FORMAT_MODULE_PATH = [
+    'myapp.formats',
+]
+
+#date
+DATE_INPUT_FORMATS = [
+    '%d-%m-%Y',      # '25-10-2010'
+    '%Y-%m-%d',      # '2006-10-25'
+    '%m/%d/%Y',      # '10/25/2006'
+    '%m/%d/%y'       # '10/25/06'
+ ]      
