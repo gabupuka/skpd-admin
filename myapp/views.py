@@ -93,6 +93,7 @@ class ATMCreateNewView(LoginRequiredMixin, generic.FormView):
         skpd.masa_berlaku_akhir = data.get('masa_berlaku_akhir')
         skpd.nilai_sewa = data.get('nilai_sewa')
         skpd.pdf_file = self.request.FILES.get('pdf_file', skpd.pdf_file)
+        skpd.image_file = self.request.FILES.get('image_file', skpd.image_file)
         skpd.comment = data.get('comment')
         skpd.save()
 
@@ -154,6 +155,7 @@ def edit_ATM(request, pk):
                 'masa_berlaku_akhir': skpd.masa_berlaku_akhir,
                 'nilai_sewa': skpd.nilai_sewa,
                 'pdf_file': skpd.pdf_file,
+                'image_file': skpd.image_file,
                 'comment': skpd.comment
             }
 
@@ -175,6 +177,7 @@ def edit_ATM(request, pk):
             skpd.masa_berlaku_akhir = data.get('masa_berlaku_akhir')
             skpd.nilai_sewa = data.get('nilai_sewa')
             skpd.pdf_file = request.FILES.get('pdf_file', skpd.pdf_file)
+            skpd.image_file = request.FILES.get('image_file', skpd.image_file)
             skpd.comment = data.get('comment')
             skpd.save()
 
@@ -249,6 +252,7 @@ class SKPDCreateNewView(LoginRequiredMixin, generic.FormView):
         skpd.masa_berlaku_akhir = data.get('masa_berlaku_akhir')
         skpd.nilai_sewa = data.get('nilai_sewa')
         skpd.pdf_file = self.request.FILES.get('pdf_file', skpd.pdf_file)
+        skpd.image_file = self.request.FILES.get('image_file', skpd.image_file)
         skpd.comment = data.get('comment')
         skpd.save()
 
@@ -309,6 +313,7 @@ def edit_SKPD(request, pk, pk_skpd):
                 'masa_berlaku_akhir': skpd.masa_berlaku_akhir,
                 'nilai_sewa': skpd.nilai_sewa,
                 'pdf_file': skpd.pdf_file,
+                'image_file': skpd.image_file,
                 'comment': skpd.comment
             }
 
@@ -327,6 +332,7 @@ def edit_SKPD(request, pk, pk_skpd):
             skpd.masa_berlaku_akhir = data.get('masa_berlaku_akhir')
             skpd.nilai_sewa = data.get('nilai_sewa')
             skpd.pdf_file = request.FILES.get('pdf_file', skpd.pdf_file)
+            skpd.image_file = request.FILES.get('image_file', skpd.image_file)
             skpd.comment = data.get('comment')
             skpd.save()
 
@@ -375,6 +381,18 @@ def download_pdf_file(request, pk, pk_skpd, file_name):
         skpd = SKPD.objects.get(pk=pk_skpd)
 
         response = HttpResponse(skpd.pdf_file, content_type='application/pdf')
+        response['Content-Disposition'] = 'inline; filename=%s' % file_name
+
+        return response
+
+def download_image_file(request, pk, pk_skpd, file_name):
+    if not request.user.is_authenticated:
+        return redirect(reverse('custom_login'))
+    else:
+        skpd = SKPD.objects.get(pk=pk_skpd)
+
+        image_data = open(skpd.image_file.path, "rb").read()
+        response = HttpResponse(image_data, content_type='image/jpeg')
         response['Content-Disposition'] = 'inline; filename=%s' % file_name
 
         return response

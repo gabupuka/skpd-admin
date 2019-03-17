@@ -5,7 +5,7 @@ from django.conf import settings
 
 class ATMForm(forms.Form):
     atm_id                      = forms.CharField(label='ID ATM', max_length=10)
-    no_skpd                     = forms.CharField(label='Nomor SKPD', max_length=17)
+    no_skpd                     = forms.CharField(label='Nomor SKPD', max_length=19)
     nama_pemilik                = forms.CharField(label='Nama Pemilik Reklame', max_length=255)
     alamat_pemilik              = forms.CharField(label='Alamat', max_length=255)
     area_koordinasi_pemilik     = forms.CharField(label='Area Koordinasi', max_length=255)
@@ -26,11 +26,12 @@ class ATMForm(forms.Form):
     masa_berlaku_awal           = forms.DateField(label='Masa Pajak Reklame (Awal)', input_formats=settings.DATE_INPUT_FORMATS, widget=forms.widgets.DateInput(format="%d-%m-%Y"))
     masa_berlaku_akhir          = forms.DateField(label='Masa Pajak Reklame (Akhir)', input_formats=settings.DATE_INPUT_FORMATS, widget=forms.widgets.DateInput(format="%d-%m-%Y"))
     nilai_sewa                  = forms.IntegerField(label='Nilai Sewa Reklame')
-    pdf_file                    = forms.FileField(label='PDF File', required=False)
+    pdf_file                    = forms.FileField(label='PDF File (.pdf)', required=False)
+    image_file                  = forms.FileField(label='Foto Reklame (.jpg)', required=False)
     comment                     = forms.CharField(label='Comment', widget=forms.Textarea, required=False)
 
 class SKPDForm(forms.Form):
-    no_skpd                     = forms.CharField(label='Nomor SKPD', max_length=17)
+    no_skpd                     = forms.CharField(label='Nomor SKPD', max_length=19)
     nama_pemilik                = forms.CharField(label='Nama Pemilik Reklame', max_length=255)
     alamat_pemilik              = forms.CharField(label='Alamat', max_length=255)
     area_koordinasi_pemilik     = forms.CharField(label='Area Koordinasi', max_length=255)
@@ -51,5 +52,6 @@ class SKPDForm(forms.Form):
     masa_berlaku_awal           = forms.DateField(label='Masa Pajak Reklame (Awal)', input_formats=settings.DATE_INPUT_FORMATS, widget=forms.widgets.DateInput(format="%d-%m-%Y"))
     masa_berlaku_akhir          = forms.DateField(label='Masa Pajak Reklame (Akhir)', input_formats=settings.DATE_INPUT_FORMATS, widget=forms.widgets.DateInput(format="%d-%m-%Y"))
     nilai_sewa                  = forms.IntegerField(label='Nilai Sewa Reklame')
-    pdf_file                    = forms.FileField(label='PDF File', required=False)
+    pdf_file                    = forms.FileField(label='PDF File (.pdf)', required=False)
+    image_file                  = forms.FileField(label='Foto Reklame (.jpg)', required=False)
     comment                     = forms.CharField(label='Comment', widget=forms.Textarea, required=False)

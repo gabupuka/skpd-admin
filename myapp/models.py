@@ -17,9 +17,12 @@ class ATM(models.Model):
 def skpd_pdf_file_path(instance, filename):
     return "pdf/ATM_{0}/SKPD_{1}/{2}".format(instance.atm.id, instance.id, filename)
 
+def skpd_image_file_path(instance, filename):
+    return "image/ATM_{0}/SKPD_{1}/{2}".format(instance.atm.id, instance.id, filename)
+
 class SKPD(models.Model):
     atm                         = models.ForeignKey(ATM, on_delete=models.CASCADE)
-    no_skpd                     = models.CharField(max_length=17)
+    no_skpd                     = models.CharField(max_length=19)
     nama_pemilik                = models.CharField(max_length=255)
     alamat_pemilik              = models.CharField(max_length=255)
     area_koordinasi_pemilik     = models.CharField(max_length=255)
@@ -33,14 +36,18 @@ class SKPD(models.Model):
     masa_berlaku_akhir          = models.DateField()
     nilai_sewa                  = models.IntegerField()
     pdf_file                    = models.FileField(storage=OverwriteStorage(), upload_to=skpd_pdf_file_path, default=None, blank=True, null=True)
+    image_file                  = models.FileField(storage=OverwriteStorage(), upload_to=skpd_image_file_path, default=None, blank=True, null=True)
     comment                     = models.TextField(default=None, blank=True, null=True)
 
     def save(self, *args, **kwargs):
         if self.id is None:
             saved_pdf_file = self.pdf_file
+            saved_image_file = self.image_file
             self.pdf_file = None
+            self.image_file = None
             super(SKPD, self).save(*args, **kwargs)
             self.pdf_file = saved_pdf_file
+            self.image_file = saved_image_file
             if 'force_insert' in kwargs:
                 kwargs.pop('force_insert')
 
@@ -53,12 +60,19 @@ class SKPD(models.Model):
 
     def pdf_file_name(self):
         return os.path.basename(self.pdf_file.name)
+    
+    def image_file_name(self):
+        return os.path.basename(self.image_file.name)
 
 @receiver(models.signals.post_delete, sender=SKPD)
 def auto_delete_file_on_delete(sender, instance, **kwargs):
     if instance.pdf_file:
         if os.path.isfile(instance.pdf_file.path):
             os.remove(instance.pdf_file.path)
+    
+    if instance.image_file:
+        if os.path.isfile(instance.image_file.path):
+            os.remove(instance.image_file.path)
 
 class Ukuran(models.Model):
     skpd        = models.OneToOneField(SKPD, on_delete=models.CASCADE, primary_key=True)
