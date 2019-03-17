@@ -264,6 +264,16 @@
           </div>
         </div>
         <div class="form-group row">
+          <label class="col-md-3 col-form-label">{% render_field form.image_file.label %}</label>
+          <div class="col-md-3">
+            {% if form.is_bound %}
+              {% render_field form.image_file class="form-control is-valid"%}
+            {% else %}
+              {% render_field form.image_file class="form-control" placeholder=form.image_file.label %}
+            {% endif %}
+          </div>
+        </div>
+        <div class="form-group row">
           <label class="col-md-3 col-form-label">{% render_field form.comment.label %}</label>
           <div class="col-md-9">
             {% if form.is_bound %}

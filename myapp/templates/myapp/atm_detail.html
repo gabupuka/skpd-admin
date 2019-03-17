@@ -86,6 +86,7 @@
                                 <th>Comment</th>
                                 <th>Nilai Sewa Reklame</th>
                                 <th>PDF</th>
+                                <th>Foto Reklame</th>
                                 <th>Customize</th>
                             </tr>
                         </thead>
@@ -101,6 +102,11 @@
                                         <td>Rp {{ skpd.nilai_sewa|intcomma }}</td>
                                         {% if skpd.pdf_file %}
                                             <td><a href="{% url 'myapp.detail_urls:download_pdf_file' atm_detail|get_dict_item:'atm_pk' skpd.id skpd.pdf_file_name %}">{{ skpd.pdf_file_name }}</a></td>
+                                        {% else %}
+                                            <td>-</td>
+                                        {% endif %}
+                                        {% if skpd.image_file %}
+                                            <td><a href="{% url 'myapp.detail_urls:download_image_file' atm_detail|get_dict_item:'atm_pk' skpd.id skpd.image_file_name %}">{{ skpd.image_file_name }}</a></td>
                                         {% else %}
                                             <td>-</td>
                                         {% endif %}
